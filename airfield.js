@@ -22,10 +22,10 @@ var swig = require('swig');
 
 var app = express();
 
-
-
 app.configure(function(){
-  app.set('port', process.env.PORT || settings.port);
+  app.set('port', process.env.AIR_PORT || settings.port);
+  app.set('username', process.env.AIR_USER || settings.username);
+  app.set('password', process.env.AIR_PASS || settings.password);
   app.set('views', __dirname + '/views');
   console.log(__dirname);
   app.engine('.html', cons.swig);
@@ -67,9 +67,9 @@ app.get('/login', function(req, res){
 
 app.post('/login', function(req, res){
 	var post = req.body;
-	if(post.user == settings.username && post.password == settings.password){
+	if (post.user == app.get('username') && post.password == app.get('password')) {
 		res.redirect('/routes');
-	}else{
+	} else {
 		res.send("Your login credientials are invalid!");
 	}
 });
