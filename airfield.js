@@ -25,7 +25,7 @@ var app = express();
 
 
 app.configure(function(){
-  app.set('port', process.env.PORT || settings.port);
+  app.set('port', process.env.AIRFIELD_PORT || process.env.PORT || settings.port);
   app.set('views', __dirname + '/views');
   console.log(__dirname);
   app.engine('.html', cons.swig);
