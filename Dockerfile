@@ -3,12 +3,19 @@
 FROM ubuntu:12.04
 MAINTAINER Nick Stinemates, Thatcher Peskens
 
-run apt-get -y update
-run apt-get install -y wget 
-run wget -O - http://nodejs.org/dist/v0.8.23/node-v0.8.23-linux-x64.tar.gz | tar -C /usr/local/ --strip-components=1 -zxv
-add . /airfield
-run cd /airfield && npm install
+RUN apt-get -y update
+RUN apt-get -y install python-software-properties git build-essential
+RUN add-apt-repository -y ppa:chris-lea/node.js
+RUN apt-get -y update
+RUN apt-get -y install nodejs
 
-expose 3000
+ADD package.json /tmp/package.json
+RUN cd /tmp && npm install
+RUN mkdir -p /airfield && cp -a /tmp/node_modules /airfield/
 
-cmd ["node", "/airfield/airfield.js"]
+WORKDIR /airfield
+ADD . /airfield
+
+EXPOSE 3000
+
+CMD ["node", "/airfield/airfield.js"]
